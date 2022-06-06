@@ -38,7 +38,7 @@
                     <div class="row">
                         <!-- left column -->
                             <div class="box">
-                                <iframe style="height: 700px; width: 100%;" src="http://localhost/cts/admin/?page=establishment"></iframe>
+                                <iframe style="height: 700px; width: 100%;" src="http://localhost:8085/cts/admin/?page=establishment"></iframe>
                             </div><!-- /.box -->
                     </div>   <!-- /.row -->
                 </section><!-- /.content -->

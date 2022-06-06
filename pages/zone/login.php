@@ -2,6 +2,24 @@
 <html>
 <?php
 session_start();
+
+include "../connection.php";
+$retry= isset($_GET['retry'])? $_GET['retry'] : '0';
+
+
+if($retry > 2){
+  echo "<script>document.getElementById('error').innerHTML = 'Maximum tries reached' ;</script>";
+  echo $_SESSION["ZONE_LOGIN_TIMER"];
+  $_SESSION["ZONE_LOGIN_TIMER"] = date("Y-m-d H:i:s", strtotime("+1 minutes"));
+  
+  header ("location: ?");
+}
+
+if($_SESSION["ZONE_LOGIN_TIMER"] > date("Y-m-d H:i:s")){
+  //echo date("Y-m-d H:i:s");
+  //echo "NO OF RETRIES MAXED OUT wait until {$_SESSION['ZONE_LOGIN_TIMER']}";
+  echo '<script> document.getElementsByClassName("container").style = "visibility:hidden"</script>';
+}
 ?>
     <head>
         <meta charset="UTF-8">
@@ -44,7 +62,12 @@ session_start();
         </div>
 
       <?php
-        include "../connection.php";
+        if($retry > 0)
+        {
+          $retry_left = 3-$retry;
+          echo "<script>document.getElementById('error').innerHTML = 'Invalid Account {$retry_left} tries left' ;</script>";
+        }
+        
         if(isset($_POST['btn_login']))
         { 
             $username = $_POST['txt_username'];
@@ -52,25 +75,34 @@ session_start();
 
             $user = mysqli_query($con, "SELECT * from tblzone where username = '$username' and password = '$password' ");
             $numrow_user = mysqli_num_rows($user);
-
-            if($numrow_user > 0)
-            {
-                while($row = mysqli_fetch_array($user)){
-                  $_SESSION['role'] = "Zone Leader";
-                  $_SESSION['userid'] = $row['id'];
-                  $_SESSION['username'] = $row['username'];
-                }    
-                header ('location: ../permit/permit.php');
+            
+            if($_SESSION["ZONE_LOGIN_TIMER"] > date("Y-m-d H:i:s")){
+              
+              echo '<script type="text/javascript">document.getElementById("error").innerHTML = "Maximum retries reach";</script>';
             }
-            else
-            {
-              echo '<script type="text/javascript">document.getElementById("error").innerHTML = "Invalid Account";</script>';
+            else{
+              if($numrow_user > 0)
+              {
+                  while($row = mysqli_fetch_array($user)){
+                    $_SESSION['role'] = "Zone Leader";
+                    $_SESSION['userid'] = $row['id'];
+                    $_SESSION['username'] = $row['username'];
+                  }    
+                  header ('location: ../permit/permit.php');
+              }
+              else
+              {
+                echo $retry;
+                $retry++;
+                //echo "<script> alert('invalid credential')</script>";
                
+                header ("location: ?retry={$retry}");
+              }
             }
-             
         }
         
       ?>
 
     </body>
+    
 </html>

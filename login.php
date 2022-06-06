@@ -2,6 +2,18 @@
 <html>
 <?php
 session_start();
+include "pages/connection.php";
+$retry= isset($_GET['retry'])? $_GET['retry'] : '0';
+
+
+if($retry > 2){
+  echo "<script>document.getElementById('error').innerHTML = 'Maximum tries reached' ;</script>";
+  echo $_SESSION["LOGIN_TIMER"];
+  $_SESSION["LOGIN_TIMER"] = date("Y-m-d H:i:s", strtotime("+1 minutes"));
+  
+  header ("location: ?");
+}
+
 ?>
     <head>
         <meta charset="UTF-8">
@@ -44,7 +56,11 @@ session_start();
         </div>
 
       <?php
-        include "pages/connection.php";
+        if($retry > 0)
+        {
+          $retry_left = 3-$retry;
+          echo "<script>document.getElementById('error').innerHTML = 'Invalid Account {$retry_left} tries left' ;</script>";
+        }
         if(isset($_POST['btn_login']))
         { 
             $username = $_POST['txt_username'];
@@ -59,41 +75,48 @@ session_start();
 
             $staff = mysqli_query($con, "SELECT * from tblstaff where username = '$username' and password = '$password' ");
             $numrow_staff = mysqli_num_rows($staff);
-
-            if($numrow_admin > 0)
-            {
-                while($row = mysqli_fetch_array($admin)){
-                  $_SESSION['role'] = "Administrator";
-                  $_SESSION['userid'] = $row['id'];
-                  $_SESSION['username'] = $row['username'];
-                }    
-                header ('location: pages/officials/officials.php');
+            if($_SESSION["LOGIN_TIMER"] > date("Y-m-d H:i:s")){
+              
+              echo '<script type="text/javascript">document.getElementById("error").innerHTML = "Maximum retries reach";</script>';
             }
-            elseif($numrow_zone > 0)
-            {
-                while($row = mysqli_fetch_array($zone)){
-                  $_SESSION['role'] = "Zone Leader";
-                  $_SESSION['userid'] = $row['id'];
-                  $_SESSION['username'] = $row['username'];
-                }    
-                header ('location: pages/permit/permit.php');
-            }
-            elseif($numrow_staff > 0)
-            {
-                while($row = mysqli_fetch_array($staff)){
-                  $_SESSION['role'] = $row['name'];
-                  $_SESSION['staff'] = "Staff";
-                  $_SESSION['userid'] = $row['id'];
-                  $_SESSION['username'] = $row['username'];
-                }    
-                header ('location: pages/resident/resident.php');
-            }
-            else
-            {
-              echo '<script type="text/javascript">document.getElementById("error").innerHTML = "Invalid Account";</script>';
-               
-            }
-             
+            else{
+              if($numrow_admin > 0)
+              {
+                  while($row = mysqli_fetch_array($admin)){
+                    $_SESSION['role'] = "Administrator";
+                    $_SESSION['userid'] = $row['id'];
+                    $_SESSION['username'] = $row['username'];
+                  }    
+                  header ('location: pages/officials/officials.php');
+              }
+              elseif($numrow_zone > 0)
+              {
+                  while($row = mysqli_fetch_array($zone)){
+                    $_SESSION['role'] = "Zone Leader";
+                    $_SESSION['userid'] = $row['id'];
+                    $_SESSION['username'] = $row['username'];
+                  }    
+                  header ('location: pages/permit/permit.php');
+              }
+              elseif($numrow_staff > 0)
+              {
+                  while($row = mysqli_fetch_array($staff)){
+                    $_SESSION['role'] = $row['name'];
+                    $_SESSION['staff'] = "Staff";
+                    $_SESSION['userid'] = $row['id'];
+                    $_SESSION['username'] = $row['username'];
+                  }    
+                  header ('location: pages/resident/resident.php');
+              }
+              else
+              {
+                echo $retry;
+                $retry++;
+                //echo "<script> alert('invalid credential')</script>";
+                
+                header ("location: ?retry={$retry}");
+              }
+          }
         }
         
       ?>
