@@ -1,11 +1,11 @@
 <!-- ========================= MODAL ======================= -->
-            <div id="addCourseModal" class="modal fade">
+<div id="healthDeclaration" class="modal fade">
             <form class="form-horizontal" method="post" enctype="multipart/form-data">
               <div class="modal-dialog modal-lg" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Manage Residents</h4>
+                        <h4 class="modal-title">Health Declaration</h4>
                     </div>
                     <div class="modal-body">
                         
@@ -243,127 +243,17 @@
 
                                 </div>
 
-
-                                
-                            </div>
-
-                            
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="container-fluid">
-                            <br><br><h3>Health declaration</h3><br>
-                                <div class="col-md-12 col-sm-12">
-
-                                    <div class="form-group">
-                                        <label class="control-label">Foreign countries you have worked, visited, transited in the past 14 days?</label>
-                                        <input name="txt_question1" class="form-control input-sm" type="text" placeholder="Answer..."/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Cities int he Philippines you have worked, visited, transited in the past 14 days?</label>
-                                        <input name="txt_question2" class="form-control input-sm" type="text" placeholder="Answer..."/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Have you been sick in the past 30 days?</label>
-                                        <input name="txt_question3" class="form-control input-sm" type="text" placeholder="Yes/No"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">In the last 14 days, did you have any of the following: fever, colds, coughs, sore throat, loss of smell and tase, muscle pain, </label>
-                                        <label class="control-label">head ache or difficulty in breathing?</label>
-                                        <input name="txt_question4" class="form-control input-sm" type="text" placeholder="Yes/No"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">In the last 14 days, have you been in close contact or exposed to any person suspected of or confirmed with COVID-19?</label>
-                                        <input name="txt_question5" class="form-control input-sm" type="text" placeholder="Yes/No"/>
-                                    </div><br><br>
-                                    <div class="form-group">
-                                        <label class="control-label">Declaration and Data Privacy Consent Form</label>
-                                        <p><br>By signing this form, I declare that the information I have given is true, correct, and complete. I understand that failure to answer any question or giving a false answer can be penalized in accordance with law.
-                                        <br><br>
-                                        I also voluntarily and freely consent to the collection and sharing of the above personal information only in relation to BMIS’s compliance to Republic of the Philippines COVID-19 business operation requirements and in accordance with the Data Privacy Act.</p><br>
-                                        <label>
-                                            <input type="checkbox" name="agree"> I Understand
-                                        </label>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-
                         
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default btn-sm" data-dismiss="modal" value="Cancel"/>
                         <input type="submit" class="btn btn-primary btn-sm" name="btn_add" id="btn_add" value="Add Resident"/>
-                        <input type="submit" class="btn btn-primary btn-sm" name="btn_test" id="btn_test" value="Test" data-toggle="modal" data-target="#healthDeclaration"/>
+                        <input type="submit" class="btn btn-primary btn-sm" name="btn_test" id="btn_test" value="Test"/>
+
                     </div>
                 </div>
               </div>
               </form>
             </div>
-
-<script type="text/javascript">
-    
-    $(document).ready(function() {
- 
-        var timeOut = null; // this used for hold few seconds to made ajax request
- 
-        var loading_html = '<img src="../../img/ajax-loader.gif" style="height: 20px; width: 20px;"/>'; // just an loading image or we can put any texts here
- 
-        //when button is clicked
-        $('#username').keyup(function(e){
- 
-            // when press the following key we need not to make any ajax request, you can customize it with your own way
-            switch(e.keyCode)
-            {
-                //case 8:   //backspace
-                case 9:     //tab
-                case 13:    //enter
-                case 16:    //shift
-                case 17:    //ctrl
-                case 18:    //alt
-                case 19:    //pause/break
-                case 20:    //caps lock
-                case 27:    //escape
-                case 33:    //page up
-                case 34:    //page down
-                case 35:    //end
-                case 36:    //home
-                case 37:    //left arrow
-                case 38:    //up arrow
-                case 39:    //right arrow
-                case 40:    //down arrow
-                case 45:    //insert
-                //case 46:  //delete
-                    return;
-            }
-            if (timeOut != null)
-                clearTimeout(timeOut);
-            timeOut = setTimeout(is_available, 500);  // delay delay ajax request for 1000 milliseconds
-            $('#user_msg').html(loading_html); // adding the loading text or image
-        });
-  });
-function is_available(){
-    //get the username
-    var username = $('#username').val();
- 
-    //make the ajax request to check is username available or not
-    $.post("check_username.php", { username: username },
-    function(result)
-    {
-        console.log(result);
-        if(result != 0)
-        {
-            $('#user_msg').html('Not Available');
-            document.getElementById("btn_add").disabled = true;
-        }
-        else
-        {
-            $('#user_msg').html('<span style="color:#006600;">Available</span>');
-            document.getElementById("btn_add").disabled = false;
-        }
-    });
- 
-}
-</script>
