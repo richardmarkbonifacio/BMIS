@@ -296,7 +296,7 @@
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default btn-sm" data-dismiss="modal" value="Cancel"/>
                         <input type="submit" class="btn btn-primary btn-sm" name="btn_add" id="btn_add" value="Add Resident"/>
-                        <input type="submit" class="btn btn-primary btn-sm" name="btn_test" id="btn_test" value="Test" data-toggle="modal" data-target="#healthDeclaration"/>
+                        <!-- <input type="submit" class="btn btn-primary btn-sm" name="btn_test" id="btn_test" value="Test" data-toggle="modal" data-target="#healthDeclaration"/> -->
                     </div>
                 </div>
               </div>
@@ -304,7 +304,7 @@
             </div>
 
 <script type="text/javascript">
-    
+
     $(document).ready(function() {
  
         var timeOut = null; // this used for hold few seconds to made ajax request
