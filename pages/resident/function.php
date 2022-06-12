@@ -62,13 +62,19 @@ if(isset($_POST['btn_add'])){
     $ct = mysqli_num_rows($su);
     
     if($ct == 0){
-
+        //create
+        $id = 0; 
+        $temp_id = mysqli_query($concts, "SELECT max(id) FROM `people`");
+        while($row = mysqli_fetch_array($temp_id)){
+            $id = $row['max(id)'] + 1;
+        }
         if($name != ""){
             if(($imagetype=="image/jpeg" || $imagetype=="image/png" || $imagetype=="image/bmp") && $size<=2048000){
                     if(move_uploaded_file($temp, 'image/'.$image))
                     {
                     $txt_image = $image;
                     $query = mysqli_query($con,"INSERT INTO tblresident (
+                                        id,
                                         lname,
                                         fname,
                                         mname,
@@ -107,6 +113,7 @@ if(isset($_POST['btn_add'])){
                                         password
                                     ) 
                                     values (
+                                        '$id',
                                         '$txt_lname', 
                                         '$txt_fname', 
                                         '$txt_mname',  
@@ -246,21 +253,16 @@ if(isset($_POST['btn_add'])){
                 header ("location: ".$_SERVER['REQUEST_URI']);
 
                 // $id =  mysqli_query($con, "SELECT max(id) FROM `tblresident`");
-   //create
-    $id = 0; 
-    $temp_id = mysqli_query($con, "SELECT max(id) FROM `tblresident`");
-    while($row = mysqli_fetch_array($temp_id)){
-        $id = $row['max(id)'] + 1;
-    }
-    $f = "create";
-    $txt_lname = $_POST['txt_lname'];
-    $txt_fname = $_POST['txt_fname'];
-    $txt_mname = $_POST['txt_mname'];
-    $txt_householdnum = $_POST['txt_householdnum'];
-    $txt_zone = $_POST['txt_zone'];
-    $txt_brgy = $_POST['txt_brgy'];
-    $txt_address =     $txt_householdnum." Zone ".$txt_zone.", ".$txt_brgy;
-    header("Location: http://localhost:8085/cts/admin/api/individual.php?f={$f}&id={$id}&firstname={$txt_fname}&lastname={$txt_lname}&middlename={$txt_mname}&address={$txt_address}");
+                
+                $f = "create";
+                $txt_lname = $_POST['txt_lname'];
+                $txt_fname = $_POST['txt_fname'];
+                $txt_mname = $_POST['txt_mname'];
+                $txt_householdnum = $_POST['txt_householdnum'];
+                $txt_zone = $_POST['txt_zone'];
+                $txt_brgy = $_POST['txt_brgy'];
+                $txt_address =     $txt_householdnum." Zone ".$txt_zone.", ".$txt_brgy;
+                header("Location: http://localhost:8085/cts/admin/api/individual.php?f={$f}&id={$id}&firstname={$txt_fname}&lastname={$txt_lname}&middlename={$txt_mname}&address={$txt_address}");
 
             }
     }
@@ -271,38 +273,63 @@ if(isset($_POST['btn_add'])){
 
 }
 
-if(isset($_POST['btn_test']))
+if(isset($_POST['btn_add_non_resident']))
 {
-    //create
-    // $id = 0; 
-    // $temp_id = mysqli_query($con, "SELECT max(id) FROM `tblresident`");
-    // while($row = mysqli_fetch_array($temp_id)){
-    //     $id = $row['max(id)'] + 1;
-    // }
-    // $f = "create";
-    // $txt_lname = $_POST['txt_lname'];
-    // $txt_fname = $_POST['txt_fname'];
-    // $txt_mname = $_POST['txt_mname'];
-    // $txt_householdnum = $_POST['txt_householdnum'];
-    // $txt_zone = $_POST['txt_zone'];
-    // $txt_brgy = $_POST['txt_brgy'];
-    // $txt_address =     $txt_householdnum." Zone ".$txt_zone.", ".$txt_brgy;
-    // header("Location: http://localhost:8085/cts/admin/api/individual.php?f={$f}&id={$id}&firstname={$txt_fname}&lastname={$txt_lname}&middlename={$txt_mname}&address={$txt_address}");
+   
+            
+    $txt_lname = $_POST['txt_lname'];
+    $txt_fname = $_POST['txt_fname'];
+    $txt_mname = $_POST['txt_mname'];
+    $ddl_gender = $_POST['ddl_gender'];
+    $txt_bdate = $_POST['txt_bdate'];
+    $txt_householdnum = $_POST['txt_householdnum'];
+    $txt_brgy = $_POST['txt_brgy'];
+    $txt_zone = $_POST['txt_zone'];
+    $txt_contact = $_POST['txt_contact'];
+    $txt_municipality = $_POST['txt_municipality'];
+    $txt_address = $txt_householdnum." Zone ".$txt_zone.", ".$txt_brgy.", ".$txt_municipality;
 
-    // update
-    // $id = 1; +
-    // $f = "update";
-    // $txt_lname = $_POST['txt_lname'];
-    // $txt_fname = $_POST['txt_fname'];
-    // $txt_mname = $_POST['txt_mname'];
-    // $txt_householdnum = $_POST['txt_householdnum'];
-    // $txt_zone = $_POST['txt_zone'];
-    // $txt_brgy = $_POST['txt_brgy'];
-    // $txt_address =     $txt_householdnum." Zone ".$txt_zone.", ".$txt_brgy;
-    // header("Location: http://localhost:8085/cts/admin/api/individual.php?f={$f}&id={$id}&firstname={$txt_fname}&lastname={$txt_lname}&middlename={$txt_mname}&address={$txt_address}");
+        //create id
+        $id = 0; 
+        $temp_id = mysqli_query($concts, "SELECT max(id) FROM `people`");
+        while($row = mysqli_fetch_array($temp_id)){
+            $id = $row['max(id)'] + 1;
+        }
+        $query = $query = mysqli_query($con,"INSERT INTO tblnonresident (
+                                    id,
+                                    lnam,
+                                    fnam,
+                                    mnam,
+                                    bdate,
+                                    contactno,
+                                    address
+                                ) 
+                                values (
+                                    '$id', 
+                                    '$txt_lname', 
+                                    '$txt_fname', 
+                                    '$txt_mname',  
+                                    '$txt_bdate',
+                                    '$txt_contact',
+                                    '$txt_address'
+                                )");
+        
+        if($query == true)
+        {
+            $_SESSION['added'] = 1;
+            header ("location: ".$_SERVER['REQUEST_URI']);
+            
+            $f = "create";
+            $txt_lname = $_POST['txt_lname'];
+            $txt_fname = $_POST['txt_fname'];
+            $txt_mname = $_POST['txt_mname'];
+            $txt_householdnum = $_POST['txt_householdnum'];
+            $txt_zone = $_POST['txt_zone'];
+            $txt_brgy = $_POST['txt_brgy'];
+            header("Location: http://localhost:8085/cts/admin/api/individual.php?f={$f}&id={$id}&firstname={$txt_fname}&lastname={$txt_lname}&middlename={$txt_mname}&address={$txt_address}&na=1");
 
-    
-
+        }
+      
 }
 
 if(isset($_POST['btn_save']))

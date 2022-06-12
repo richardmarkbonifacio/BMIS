@@ -4,6 +4,7 @@
 
 
  $con = mysqli_connect('localhost','root','','db_barangay') or die(mysqli_error());
+ $concts = mysqli_connect('localhost','root','','cts_db') or die(mysqli_error());
 
 
 

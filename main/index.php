@@ -46,6 +46,7 @@
         <li><a href="about.php">About</a></li>
         <li><a href="../login.php">Admin</a></li>
         <li><a href="../pages/resident/login.php">Resident</a></li>
+        <li><a href="nonresident.php">Non-Resident</a></li>
         <li><a href="../pages/zone/login.php">Zone Leader</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
